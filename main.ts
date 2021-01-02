@@ -27,9 +27,9 @@ rechteWandTeil = rechteWandListe[0]
         rechteWandTeil.x = posR
     }
 }
+let scoreAddition = 0
 let kurvenzufallszahl = 0
 let kurve = 0
-let speed = 5
 let updateExecutionCtr = 0
 let posR = 0
 let newX = 0
@@ -38,10 +38,11 @@ let posR2 = 0
 let posL = 0
 let Rennauto: Sprite = null
 let strassenbreite = 0
-let rechteWandTeil: Sprite = null
-let linkeWandTeil: Sprite = null
-let linkeWandListe: Sprite[] = []
 let rechteWandListe: Sprite[] = []
+let linkeWandListe: Sprite[] = []
+let linkeWandTeil: Sprite = null
+let rechteWandTeil: Sprite = null
+let speed = 5
 strassenbreite = 90
 Rennauto = sprites.create(img`
     . . . . . . e e c c e e . . . . 
@@ -62,7 +63,7 @@ Rennauto = sprites.create(img`
     . . . . f f . . . . . . f f . . 
     `, SpriteKind.Player)
 Rennauto.setFlag(SpriteFlag.StayInScreen, true)
-Rennauto.y=120
+Rennauto.y = 120
 controller.moveSprite(Rennauto, 100, 100)
 linkeWandListe = sprites.allOfKind(SpriteKind.WandTeilLinks)
 rechteWandListe = sprites.allOfKind(SpriteKind.WandTeilRechts)
@@ -79,7 +80,7 @@ for (let Index = 0; Index <= AnzahlWandteile; Index++) {
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
-    `, SpriteKind.WandTeilLinks)
+        `, SpriteKind.WandTeilLinks)
     linkeWandListe.push(linkeWandTeil)
     rechteWandTeil = sprites.create(img`
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
@@ -92,7 +93,7 @@ for (let Index = 0; Index <= AnzahlWandteile; Index++) {
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
-    `, SpriteKind.WandTeilRechts)
+        `, SpriteKind.WandTeilRechts)
     rechteWandListe.push(rechteWandTeil)
     posL = -50
     posR2 = posL + linkeWandTeil.width + strassenbreite
@@ -101,25 +102,20 @@ for (let Index = 0; Index <= AnzahlWandteile; Index++) {
     rechteWandTeil.setPosition(posR2, y)
 }
 info.setLife(6)
+let controllerTopOffset = 90
 game.onUpdateInterval(2500, function () {
-    if (strassenbreite > 60) {
+    if (strassenbreite > 40) {
         strassenbreite = strassenbreite - 1
     }
-    
 })
-let controllerTopOffset=90
-
 game.onUpdateInterval(10, function () {
-
-    speed=Math.floor(((Rennauto.y-controllerTopOffset)/10))
-    if (speed<0)
-    {
-        speed=0
+    speed = Math.floor((Rennauto.y - controllerTopOffset) / 10)
+    if (speed < 0) {
+        speed = 0
     }
-//    console.logValue("speed", speed)
-//    console.logValue("Rennauto.y",Rennauto.y)
-    if (updateExecutionCtr >= speed) 
-    {
+    // console.logValue("speed", speed)
+    // console.logValue("Rennauto.y",Rennauto.y)
+    if (updateExecutionCtr >= speed) {
         updateExecutionCtr = 0
         if (1 == kurve) {
             calcWalls(3)
@@ -130,9 +126,7 @@ game.onUpdateInterval(10, function () {
                 calcWalls(0)
             }
         }
-    }
-    else
-    {
+    } else {
         updateExecutionCtr += 1
     }
 })
@@ -147,8 +141,6 @@ game.onUpdateInterval(500, function () {
             kurve = 0
         }
     }
-
-    
-    let scoreAddition = (10-speed)
+    scoreAddition = 10 - speed
     info.changeScoreBy(scoreAddition)
 })

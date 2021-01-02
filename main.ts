@@ -10,10 +10,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.WandTeilRechts, function (sprite
     Rennauto.x += -10
     info.changeLifeBy(-1)
 })
-
-
 function calcWalls (offset: number) {
-
     for (let Index3 = AnzahlWandteile; Index3 >0 ; Index3--) {
             linkeWandTeil = linkeWandListe[Index3]
             rechteWandTeil = rechteWandListe[Index3]
@@ -21,33 +18,31 @@ function calcWalls (offset: number) {
             linkeWandTeil.x = linkeWandListe[Index3-1].x
             rechteWandTeil.x = rechteWandListe[Index3-1].x
         }
-
-    rechteWandTeil = rechteWandListe[0]
+rechteWandTeil = rechteWandListe[0]
     linkeWandTeil = linkeWandListe[0]
-
-    let newX= linkeWandTeil.x + offset
-
-    if (newX > -linkeWandTeil.width+strassenbreite && newX <linkeWandTeil.width-strassenbreite-strassenbreite)
-    {
-        let posR = newX+linkeWandTeil.width+strassenbreite
-        console.logValue("newX", newX)
-        console.logValue("posR", posR)
-
+    newX = linkeWandTeil.x + offset
+    if (newX > 0 - linkeWandTeil.width + strassenbreite && newX < linkeWandTeil.width - strassenbreite - strassenbreite) {
+        posR = newX + linkeWandTeil.width + strassenbreite
         linkeWandTeil.x = newX
         rechteWandTeil.x = posR
     }
 }
-
-
-let updateExecutionCtr =0
 let kurvenzufallszahl = 0
 let kurve = 0
-let strassenbreite = 70
-let rechteWandListe: Sprite[] = []
-let linkeWandListe: Sprite[] = []
+let speed = 5
+let updateExecutionCtr = 0
+let posR = 0
+let newX = 0
+let y = 0
+let posR2 = 0
+let posL = 0
 let Rennauto: Sprite = null
-let linkeWandTeil: Sprite = null
+let strassenbreite = 0
 let rechteWandTeil: Sprite = null
+let linkeWandTeil: Sprite = null
+let linkeWandListe: Sprite[] = []
+let rechteWandListe: Sprite[] = []
+strassenbreite = 90
 Rennauto = sprites.create(img`
     . . . . . . e e c c e e . . . . 
     . . . . . e 2 2 2 2 2 2 e . . . 
@@ -67,6 +62,7 @@ Rennauto = sprites.create(img`
     . . . . f f . . . . . . f f . . 
     `, SpriteKind.Player)
 Rennauto.setFlag(SpriteFlag.StayInScreen, true)
+Rennauto.y=120
 controller.moveSprite(Rennauto, 100, 100)
 linkeWandListe = sprites.allOfKind(SpriteKind.WandTeilLinks)
 rechteWandListe = sprites.allOfKind(SpriteKind.WandTeilRechts)
@@ -78,7 +74,7 @@ for (let Index = 0; Index <= AnzahlWandteile; Index++) {
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
-    `, SpriteKind.WandTeilLinks)
+        `, SpriteKind.WandTeilLinks)
     linkeWandListe.push(linkeWandTeil)
     rechteWandTeil = sprites.create(img`
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
@@ -86,27 +82,35 @@ for (let Index = 0; Index <= AnzahlWandteile; Index++) {
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
-    `, SpriteKind.WandTeilRechts)
+        `, SpriteKind.WandTeilRechts)
     rechteWandListe.push(rechteWandTeil)
-
-    let posL = -50 
-    let posR = posL+linkeWandTeil.width+strassenbreite
-    let y = Index * 120 / AnzahlWandteile
+    posL = -50
+    posR2 = posL + linkeWandTeil.width + strassenbreite
+    y = Index * 120 / AnzahlWandteile
     linkeWandTeil.setPosition(posL, y)
-    rechteWandTeil.setPosition(posR, y)
-
+    rechteWandTeil.setPosition(posR2, y)
 }
 info.setLife(6)
+game.onUpdateInterval(2500, function () {
+    if (strassenbreite > 60) {
+        strassenbreite = strassenbreite - 1
+    }
+    
+})
+let controllerTopOffset=90
 
+game.onUpdateInterval(10, function () {
 
-game.onUpdateInterval(10,function () {
-
-    updateExecutionCtr++
-
-    let speed = ((Rennauto.y-50)*3) / 120 
-    if (updateExecutionCtr>=speed)
-    {   
-        updateExecutionCtr=0
+    speed=Math.floor(((Rennauto.y-controllerTopOffset)/10))
+    if (speed<0)
+    {
+        speed=0
+    }
+//    console.logValue("speed", speed)
+//    console.logValue("Rennauto.y",Rennauto.y)
+    if (updateExecutionCtr >= speed) 
+    {
+        updateExecutionCtr = 0
         if (1 == kurve) {
             calcWalls(3)
         } else {
@@ -117,8 +121,11 @@ game.onUpdateInterval(10,function () {
             }
         }
     }
+    else
+    {
+        updateExecutionCtr += 1
+    }
 })
-
 game.onUpdateInterval(500, function () {
     kurvenzufallszahl = randint(-1, 1)
     if (0.2 < kurvenzufallszahl) {
@@ -130,12 +137,8 @@ game.onUpdateInterval(500, function () {
             kurve = 0
         }
     }
-})
 
-game.onUpdateInterval(2500, function () {
-    if (strassenbreite>60)
-    {
-        strassenbreite=strassenbreite-1
-    }
-    info.changeScoreBy(1)
+    
+    let scoreAddition = (10-speed)
+    info.changeScoreBy(scoreAddition)
 })

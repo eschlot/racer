@@ -161,7 +161,6 @@ forever(function () {
         Rennauto.y = controllerTopOffset
     }
     speed = Rennauto.y - controllerTopOffset + 25
-    console.logValue("speed", speed)
     pause(speed)
     calcWalls(kurve)
 })

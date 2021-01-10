@@ -24,9 +24,14 @@ enum Color {
     Black // 15 = RGB(0, 0, 0)
 }
 
+info.onLifeZero(function() {
+    controller.vibrate(0)   
+    game.over(false)
+})
 
 sprites.onOverlap(SpriteKind.Player, SpriteKind.WandTeilLinks, function (sprite, otherSprite) {
     Rennauto.x += 10
+    Rennauto.y += 10
     scene.cameraShake(4, 300)
     controller.vibrate(200)
     info.changeLifeBy(-1)
@@ -34,6 +39,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.WandTeilLinks, function (sprite,
 
 sprites.onOverlap(SpriteKind.Player, SpriteKind.WandTeilRechts, function (sprite, otherSprite) {
     Rennauto.x += -10
+    Rennauto.y += 10
     scene.cameraShake(4, 300)
     controller.vibrate(200)
     info.changeLifeBy(-1)
@@ -55,7 +61,6 @@ function calcWalls (offset: number) {
             rechteWandTeil.left = rechteWandListe[Index3-1].left
             streetSprite.x = streetListe[Index3-1].x
         }
-
     rechteWandTeil = rechteWandListe[0]
     linkeWandTeil = linkeWandListe[0]
     streetSprite = streetListe[0]
@@ -67,14 +72,6 @@ function calcWalls (offset: number) {
         calcLine(pos, linkeWandTeil, rechteWandTeil, streetSprite)
     }
 }
-
-
-let kurvenzufallszahl = 0
-let kurve = 0
-let streetOffset=0
-let streetPos = 0
-let pos = 50
-
 
 let Rennauto: Sprite = null
 
@@ -89,13 +86,13 @@ let streetListe: Sprite[] = []
 let linkeWandListe: Sprite[] = []
 let rechteWandListe: Sprite[] = []
 
-let startStrassenbreite = 90
+let startStrassenbreite = 70
 let strassenbreite = startStrassenbreite
 
 let scoreAddition = 0
 let speed = 30
 let controllerTopOffset = 80
-
+let kurve = 0
 
 linkeWandListe = sprites.allOfKind(SpriteKind.WandTeilLinks)
 rechteWandListe = sprites.allOfKind(SpriteKind.WandTeilRechts)
@@ -105,8 +102,8 @@ let AnzahlWandteile = 13
 let hoehe = 1
 let y = 20
 
-pos = scene.screenWidth() /2
-streetOffset = Math.floor(strassenbreite/2)
+let pos = scene.screenWidth() /2
+let streetOffset = Math.floor(strassenbreite/2)
 
 for (let Index = 0; Index <= AnzahlWandteile; Index++) {
     tempLw = image.create(scene.screenWidth(), hoehe)
@@ -152,7 +149,7 @@ Rennauto = sprites.create(img`
 `, SpriteKind.Player)
 Rennauto.setFlag(SpriteFlag.StayInScreen, true)
 Rennauto.y = 110
-controller.moveSprite(Rennauto, 100, 20)
+controller.moveSprite(Rennauto, 120, 20)
 info.setLife(6)
 game.onUpdateInterval(2500, function () {
     if (strassenbreite > 45) {
@@ -163,32 +160,14 @@ forever(function () {
     if (controllerTopOffset > Rennauto.y) {
         Rennauto.y = controllerTopOffset
     }
-    speed = Rennauto.y - controllerTopOffset
-    if (speed < 10) {
-        speed = 10
-    }
+    speed = Rennauto.y - controllerTopOffset + 25
+    console.logValue("speed", speed)
     pause(speed)
-    if (1 == kurve) {
-        calcWalls(3)
-    } else {
-        if (-1 == kurve) {
-            calcWalls(-3)
-        } else {
-            calcWalls(0)
-        }
-    }
+    calcWalls(kurve)
 })
-game.onUpdateInterval(500, function () {
-    kurvenzufallszahl = randint(-1, 1)
-    if (0.2 < kurvenzufallszahl) {
-        kurve = 1
-    } else {
-        if (-0.2 > kurvenzufallszahl) {
-            kurve = -1
-        } else {
-            kurve = 0
-        }
-    }
-    scoreAddition = scene.screenHeight() - controllerTopOffset - speed
+
+game.onUpdateInterval(800, function () {
+    kurve = Math.round((randint(0, 7)-3)*1.7)
+    scoreAddition = scene.screenHeight() -  Rennauto.y
     info.changeScoreBy(scoreAddition)
 })

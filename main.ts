@@ -2,6 +2,7 @@ namespace SpriteKind {
     export const WandTeilLinks = SpriteKind.create()
     export const WandTeilRechts = SpriteKind.create()
     export const Street = SpriteKind.create()
+    export const Car = SpriteKind.create()
 }
 
 // enum Color
@@ -80,7 +81,7 @@ function calcWalls (offset: number) {
 }
 
 let Rennauto: Sprite = null
-
+let car : Cars = null
 let streetImage: Image = null
 let tempLw: Image = null
 
@@ -157,6 +158,12 @@ Rennauto.setFlag(SpriteFlag.StayInScreen, true)
 Rennauto.y = 110
 controller.moveSprite(Rennauto, 120, 20)
 info.setLife(6)
+car = new Cars(streetListe,controllerTopOffset)
+
+
+
+
+
 game.onUpdateInterval(2500, function () {
     if (strassenbreite > 45) {
         strassenbreite = strassenbreite - 1
@@ -169,6 +176,7 @@ forever(function () {
     speed = Rennauto.y - controllerTopOffset + 25
     pause(speed)
     calcWalls(kurve)
+    car.updateInterval()
 })
 
 game.onUpdateInterval(800, function () {
@@ -176,3 +184,4 @@ game.onUpdateInterval(800, function () {
     scoreAddition = scene.screenHeight() -  Rennauto.y
     info.changeScoreBy(scoreAddition)
 })
+

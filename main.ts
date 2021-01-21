@@ -33,7 +33,10 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.WandTeilLinks, function (sprite,
     Rennauto.x += 10
     Rennauto.y += 10
     scene.cameraShake(4, 300)
-    controller.vibrate(200)
+    if (info.life()>0)
+    {
+        controller.vibrate(200)
+    }
     info.changeLifeBy(-1)
 })
 
@@ -41,7 +44,10 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.WandTeilRechts, function (sprite
     Rennauto.x += -10
     Rennauto.y += 10
     scene.cameraShake(4, 300)
-    controller.vibrate(200)
+    if (info.life()>0)
+    {
+        controller.vibrate(200)
+    }
     info.changeLifeBy(-1)
 })
 
@@ -114,12 +120,12 @@ for (let Index = 0; Index <= AnzahlWandteile; Index++) {
     if (Index % 2 == 0) {
         streetImage.drawLine(startStrassenbreite / 2, 0, startStrassenbreite / 2, hoehe + 1, Color.White)
     }
+    streetSprite = sprites.create(streetImage, SpriteKind.Street)
+    streetListe.push(streetSprite)
     linkeWandTeil = sprites.create(tempLw, SpriteKind.WandTeilLinks)
     linkeWandListe.push(linkeWandTeil)
     rechteWandTeil = sprites.create(tempLw, SpriteKind.WandTeilRechts)
     rechteWandListe.push(rechteWandTeil)
-    streetSprite = sprites.create(streetImage, SpriteKind.Street)
-    streetListe.push(streetSprite)
     
     linkeWandTeil.y = y
     rechteWandTeil.y = y

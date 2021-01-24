@@ -168,22 +168,22 @@ for (let Index = 0; Index <= AnzahlWandteile; Index++) {
     hoehe += 1
 }
 Rennauto = sprites.create(img`
-    . . . . . . e e c c e e . . . .
-    . . . . . e 2 2 2 2 2 2 e . . .
-    . . . . 2 c 2 2 2 2 2 2 c 2 . .
-    . . . e 2 c 4 2 2 2 2 2 c 2 e .
-    . . . f 2 2 4 2 2 2 2 2 c 2 f .
-    . . . f 2 2 4 2 2 2 2 2 2 2 f .
-    . . . f 2 2 4 2 2 2 2 2 2 2 f .
-    . . . f 2 c 2 4 4 2 2 2 c 2 f .
-    . . . e 2 c e c c c c e c 2 e .
-    . . . e 2 e c b b b b c e 2 e .
-    . . . e 2 e b b b b b b e 2 e .
-    . . . e e e e e e e e e e e e .
-    . . . f e d e e e e e e d e f .
-    . . . f e 2 d e e e e d 2 e f .
-    . . . f f e e e e e e e e f f .
-    . . . . f f . . . . . . f f . .
+    . . . . 8 8 8 8 8 8 8 8 . . . .
+    . . . f f 2 2 5 5 2 2 f f . . .
+    . . . f f 2 5 2 2 5 2 f f . . .
+    . . . f f 5 2 2 2 2 5 f f . . .
+    . . . . . 5 2 6 6 2 5 . . . . .
+    . . . . . 5 2 5 5 2 5 . . . . .
+    . . . . . 2 2 5 5 2 2 . . . . .
+    . . . . . 2 2 8 8 2 2 . . . . .
+    . . . . 2 5 2 f f 2 5 2 . . . .
+    . . f f 2 5 2 f f 2 5 2 f f . .
+    . . f f 2 5 2 f f 2 5 2 f f . .
+    . . f f 2 5 2 2 2 2 5 2 f f . .
+    . . f f 2 5 2 2 2 2 5 2 f f . .
+    . . . . . . f f f f . . . . . .
+    . . 2 2 2 2 f f f f 2 2 2 2 . .
+    . . 5 5 5 5 f f f f 5 5 5 5 . .
 `, SpriteKind.Player)
 Rennauto.setFlag(SpriteFlag.StayInScreen, true)
 Rennauto.y = 110

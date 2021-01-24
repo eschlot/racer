@@ -7,16 +7,15 @@ enum CarPosition {
 
 class Cars {
     public carSprite : Sprite;
-    public speed : number;
-    public cycle : number;
-    private offsetSpeed : number;
+    public speed :int32;
+    private offsetSpeed : int32;
     public position: CarPosition;
 
     private mappingYtoStreetIndexArray :Sprite[] =[];
     private steeringSpeed = 100;
     private horizont :number;
 
-    constructor(streetListe: Sprite[], horizont: number){
+    constructor(streetListe: Sprite[], horizont: number, intialPosition:number){
         this.horizont = horizont
         this.carSprite = sprites.create(img`
             . . . . . . 8 8 c c 8 8 . . . .
@@ -37,7 +36,7 @@ class Cars {
             . . . . f f . . . . . . f f . .
         `, SpriteKind.Car)
         this.speed = 0
-        this.cycle = 0
+        
 
         
 
@@ -51,7 +50,7 @@ class Cars {
         }
 
         this.position = CarPosition.Left
-        this.carSprite.bottom = this.horizont
+        this.carSprite.bottom = intialPosition
         this.speed = -1
 
     }

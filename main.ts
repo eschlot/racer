@@ -108,7 +108,8 @@ function calcWalls (offset: number) {
 }
 
 let Rennauto: Sprite = null
-let car : Cars = null
+let car1 : Cars = null
+let car2 : Cars = null
 let streetImage: Image = null
 let tempLw: Image = null
 
@@ -187,7 +188,8 @@ Rennauto.setFlag(SpriteFlag.StayInScreen, true)
 Rennauto.y = 110
 controller.moveSprite(Rennauto, 120, 40)
 info.setLife(6)
-car = new Cars(streetListe,horizont)
+car1 = new Cars(streetListe,horizont,horizont)
+car2 = new Cars(streetListe,horizont,horizont*4)
 
 scene.setBackgroundColor(Color.LightBlue)
 
@@ -205,7 +207,8 @@ forever(function () {
     
     pause(speed)
     calcWalls(kurve)
-    car.updateInterval(speed)
+    car1.updateInterval(speed)
+    car2.updateInterval(speed)
 })
 
 game.onUpdateInterval(800, function () {

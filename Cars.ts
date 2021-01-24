@@ -1,4 +1,4 @@
-// Gib deinen Code hier ein
+ // Gib deinen Code hier ein
 
 enum CarPosition {
     Left,
@@ -66,7 +66,7 @@ class Cars {
             {
                 this.speed = -10
             }
-            else if (temp>50)
+            else if (temp>30)
             {
                 this.speed = 10
             }
@@ -93,19 +93,19 @@ class Cars {
         let streetSprite = this.mappingYtoStreetIndexArray[y]
         if (streetSprite!=null)
         {
-            let targetPosition = streetSprite.left-15
+            let targetPosition = streetSprite.left-20
             if (this.position == CarPosition.Left)
             {
-                targetPosition = streetSprite.left+15
+                targetPosition = streetSprite.left+20
             }
             console.logValue("targetPosition", targetPosition)
             console.logValue("carSprite.x", this.carSprite.x)
 
-            if (this.carSprite.x <targetPosition)
+            if (this.carSprite.x < targetPosition-5)
             {
                 this.carSprite.vx = this.steeringSpeed 
             }
-            else if (this.carSprite.x > targetPosition)
+            else if (this.carSprite.x > targetPosition+5)
             {
                 this.carSprite.vx= (-this.steeringSpeed)
             }

@@ -99,6 +99,7 @@ let strassenbreite = startStrassenbreite
 let scoreAddition = 0
 let speed = 30
 let controllerTopOffset = 80
+let horizont=20
 let kurve = 0
 
 linkeWandListe = sprites.allOfKind(SpriteKind.WandTeilLinks)
@@ -107,7 +108,7 @@ streetListe = sprites.allOfKind(SpriteKind.Street)
 
 let AnzahlWandteile = 13
 let hoehe = 1
-let y = 20
+let y = horizont
 
 let pos = scene.screenWidth() /2
 let streetOffset = Math.floor(strassenbreite/2)
@@ -156,9 +157,9 @@ Rennauto = sprites.create(img`
 `, SpriteKind.Player)
 Rennauto.setFlag(SpriteFlag.StayInScreen, true)
 Rennauto.y = 110
-controller.moveSprite(Rennauto, 120, 20)
+controller.moveSprite(Rennauto, 120, 40)
 info.setLife(6)
-car = new Cars(streetListe,controllerTopOffset)
+car = new Cars(streetListe,horizont)
 
 
 

@@ -52,6 +52,32 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.WandTeilRechts, function (sprite
     info.changeLifeBy(-1)
 })
 
+
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Car, function(player: Sprite, carSprite: Sprite) {
+    let bumpOffset = 5
+    if (player.x<carSprite.x)
+    {
+        player.x-=bumpOffset
+        carSprite.x+=bumpOffset
+    }
+    else
+    {
+        player.x+=bumpOffset
+        carSprite.x-=bumpOffset
+    }
+    
+    if (player.y<carSprite.y)
+    {
+        player.y-=bumpOffset
+        carSprite.y+=bumpOffset
+    }
+    else
+    {
+        player.y+=bumpOffset
+        carSprite.y-=bumpOffset
+    }
+})
+
 function calcLine (pos: number, linkeWandTeil: Sprite, rechteWandTeil: Sprite, streetSprite: Sprite) {
     streetSprite.x = pos
     linkeWandTeil.right = pos-streetOffset
@@ -102,11 +128,12 @@ let controllerTopOffset = 80
 let horizont=20
 let kurve = 0
 
+
 linkeWandListe = sprites.allOfKind(SpriteKind.WandTeilLinks)
 rechteWandListe = sprites.allOfKind(SpriteKind.WandTeilRechts)
 streetListe = sprites.allOfKind(SpriteKind.Street)
 
-let AnzahlWandteile = 13
+let AnzahlWandteile = 14
 let hoehe = 1
 let y = horizont
 
@@ -161,7 +188,7 @@ controller.moveSprite(Rennauto, 120, 40)
 info.setLife(6)
 car = new Cars(streetListe,horizont)
 
-
+scene.setBackgroundColor(Color.LightBlue)
 
 
 
@@ -175,9 +202,10 @@ forever(function () {
         Rennauto.y = controllerTopOffset
     }
     speed = Rennauto.y - controllerTopOffset + 25
+    
     pause(speed)
     calcWalls(kurve)
-    car.updateInterval()
+    car.updateInterval(speed)
 })
 
 game.onUpdateInterval(800, function () {

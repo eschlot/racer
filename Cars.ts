@@ -9,14 +9,15 @@ class Cars {
     public carSprite : Sprite;
     public speed : number;
     public cycle : number;
+    private offsetSpeed : number;
     public position: CarPosition;
 
     private mappingYtoStreetIndexArray :Sprite[] =[];
-    private steeringSpeed = 80;
-    private controllerTopOffset :number;
+    private steeringSpeed = 100;
+    private horizont :number;
 
-    constructor(streetListe: Sprite[], controllerTopOffset: number){
-        this.controllerTopOffset = controllerTopOffset
+    constructor(streetListe: Sprite[], horizont: number){
+        this.horizont = horizont
         this.carSprite = sprites.create(img`
             . . . . . . 8 8 c c 8 8 . . . .
             . . . . . 8 6 6 6 6 6 6 8 . . .
@@ -50,45 +51,31 @@ class Cars {
         }
 
         this.position = CarPosition.Left
-        this.carSprite.y = this.controllerTopOffset
+        this.carSprite.bottom = this.horizont
         this.speed = -1
 
     }
 
-    public updateInterval()
+    public updateInterval(inverseGameSpeed:number)
     {
-        this.cycle +=1;
-        if (this.cycle == 10)
-        {
-            this.cycle = 0;
-            let temp = randint(0,100)
-            if (temp>90)
-            {
-                this.speed = -10
-            }
-            else if (temp>30)
-            {
-                this.speed = 10
-            }
-            else
-            {
-                this.speed = 0
-            }
-        }
-        
+        this.offsetSpeed=-3*((inverseGameSpeed-57)+2)
+
+        //console.logValue("inverseGameSpeed", inverseGameSpeed)
+        //console.logValue("offsetSpeed", this.offsetSpeed)
+        this.speed = this.offsetSpeed
+
+        //console.logValue("speed", this.speed)
         
 
-        if ((this.carSprite.y<this.controllerTopOffset) || (this.carSprite.y>scene.screenHeight()+10))
+        if ((this.carSprite.bottom<this.horizont) || (this.carSprite.bottom>scene.screenHeight()+11))
         {
-            this.carSprite.y=this.controllerTopOffset
-            this.speed = 15
+            this.carSprite.bottom=this.horizont
+            info.setScore(info.score()+400)
         }
         this.carSprite.vy = this.speed
 
-        console.logValue("speed", this.speed)
-        let y = Math.round(this.carSprite.y)
-        console.logValue("y", y)
-
+        let y = Math.round(this.carSprite.bottom)
+        //console.logValue("y", y)
 
         let streetSprite = this.mappingYtoStreetIndexArray[y]
         if (streetSprite!=null)
@@ -98,8 +85,8 @@ class Cars {
             {
                 targetPosition = streetSprite.left+20
             }
-            console.logValue("targetPosition", targetPosition)
-            console.logValue("carSprite.x", this.carSprite.x)
+            //console.logValue("targetPosition", targetPosition)
+            //console.logValue("carSprite.x", this.carSprite.x)
 
             if (this.carSprite.x < targetPosition-5)
             {
@@ -113,14 +100,10 @@ class Cars {
             {
                 this.carSprite.vx=0
             }
-            
-            console.logValue("carSprite.vx", this.carSprite.vx)
-
-
         }
         else
         {
-            console.log("Null")
+            console.logValue("Null: y", y)
         }
     }
 

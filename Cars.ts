@@ -46,7 +46,7 @@ class Cars {
             for (let index = Math.round(streetSprite.top);index <streetSprite.bottom;index++)
             {
                 this.mappingYtoStreetIndexArray[index]=streetSprite
-                console.log("index: "+ index.toString()+ " streetSprite:"+streetSprite.height.toString())
+                //console.log("index: "+ index.toString()+ " streetSprite:"+streetSprite.height.toString())
             }
         }
 
@@ -70,7 +70,18 @@ class Cars {
         if ((this.carSprite.bottom<this.horizont) || (this.carSprite.bottom>scene.screenHeight()+11))
         {
             this.carSprite.bottom=this.horizont
-            info.setScore(info.score()+400)
+            info.changeScoreBy(400)
+            if (false)
+            {
+                if (this.position == CarPosition.Left)
+                { 
+                    this.position= CarPosition.Right
+                }
+                else
+                {
+                    this.position= CarPosition.Left
+                }
+            }
         }
         this.carSprite.vy = this.speed
 

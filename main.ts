@@ -52,9 +52,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.WandTeilRechts, function (sprite
     info.changeLifeBy(-1)
 })
 
+let bumpOffset : int16 = 5
 
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Car, function(player: Sprite, carSprite: Sprite) {
-    let bumpOffset = 5
     if (player.x<carSprite.x)
     {
         player.x-=bumpOffset
@@ -76,6 +76,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Car, function(player: Sprite, ca
         player.y+=bumpOffset
         carSprite.y-=bumpOffset
     }
+    info.changeScoreBy(-10)
 })
 
 function calcLine (pos: number, linkeWandTeil: Sprite, rechteWandTeil: Sprite, streetSprite: Sprite) {
@@ -98,7 +99,7 @@ function calcWalls (offset: number) {
     linkeWandTeil = linkeWandListe[0]
     streetSprite = streetListe[0]
 
-    streetOffset = Math.floor(strassenbreite/2)
+    streetOffset = (strassenbreite/2)
     pos = streetSprite.x + offset
 
     if ((pos > streetOffset) && (pos < scene.screenWidth()-streetOffset )) {
@@ -119,26 +120,26 @@ let streetListe: Sprite[] = []
 let linkeWandListe: Sprite[] = []
 let rechteWandListe: Sprite[] = []
 
-let startStrassenbreite = 70
-let strassenbreite = startStrassenbreite
+let startStrassenbreite: int16 = 70
+let strassenbreite:int16 = startStrassenbreite
 
-let scoreAddition = 0
-let speed = 30
-let controllerTopOffset = 80
-let horizont=20
-let kurve = 0
+let scoreAddition : int16 = 0
+let speed: int16 = 30
+let controllerTopOffset : int16 = 80
+let horizont : int16 =20
+let kurve : int16 = 0
 
 
 linkeWandListe = sprites.allOfKind(SpriteKind.WandTeilLinks)
 rechteWandListe = sprites.allOfKind(SpriteKind.WandTeilRechts)
 streetListe = sprites.allOfKind(SpriteKind.Street)
 
-let AnzahlWandteile = 14
-let hoehe = 1
-let y = horizont
+let AnzahlWandteile:int16 = 14
+let hoehe : int16 = 1
+let y : int16 = horizont
 
-let pos = scene.screenWidth() /2
-let streetOffset = Math.floor(strassenbreite/2)
+let pos :int32 = scene.screenWidth() /2
+let streetOffset :int32 = strassenbreite/2
 
 for (let Index = 0; Index <= AnzahlWandteile; Index++) {
     tempLw = image.create(scene.screenWidth(), hoehe)
@@ -191,9 +192,8 @@ car = new Cars(streetListe,horizont)
 scene.setBackgroundColor(Color.LightBlue)
 
 
-
 game.onUpdateInterval(2500, function () {
-    if (strassenbreite > 45) {
+    if (strassenbreite > 50) {
         strassenbreite = strassenbreite - 1
     }
 })

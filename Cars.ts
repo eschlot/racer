@@ -1,4 +1,4 @@
-// Gib deinen Code hier ein
+ // Gib deinen Code hier ein
 
 enum CarPosition {
     Left,
@@ -7,16 +7,16 @@ enum CarPosition {
 
 class Cars {
     public carSprite : Sprite;
-    public speed : number;
-    public cycle : number;
+    public speed :int32;
+    private offsetSpeed : int32;
     public position: CarPosition;
 
     private mappingYtoStreetIndexArray :Sprite[] =[];
-    private steeringSpeed = 80;
-    private controllerTopOffset :number;
+    private steeringSpeed = 100;
+    private horizont :number;
 
-    constructor(streetListe: Sprite[], controllerTopOffset: number){
-        this.controllerTopOffset = controllerTopOffset
+    constructor(streetListe: Sprite[], horizont: number, intialPosition:number, intialCarPosition:CarPosition){
+        this.horizont = horizont
         this.carSprite = sprites.create(img`
             . . . . . . 8 8 c c 8 8 . . . .
             . . . . . 8 6 6 6 6 6 6 8 . . .
@@ -36,7 +36,7 @@ class Cars {
             . . . . f f . . . . . . f f . .
         `, SpriteKind.Car)
         this.speed = 0
-        this.cycle = 0
+        
 
         
 
@@ -45,67 +45,67 @@ class Cars {
             for (let index = Math.round(streetSprite.top);index <streetSprite.bottom;index++)
             {
                 this.mappingYtoStreetIndexArray[index]=streetSprite
-                console.log("index: "+ index.toString()+ " streetSprite:"+streetSprite.height.toString())
+                //console.log("index: "+ index.toString()+ " streetSprite:"+streetSprite.height.toString())
             }
         }
 
-        this.position = CarPosition.Left
-        this.carSprite.y = this.controllerTopOffset
+        this.position = intialCarPosition
+        this.carSprite.bottom = intialPosition
         this.speed = -1
 
     }
 
-    public updateInterval()
+    public updateInterval(inverseGameSpeed:number)
     {
-        this.cycle +=1;
-        if (this.cycle == 10)
+        this.offsetSpeed=-3*((inverseGameSpeed-57)+2)
+
+        //console.logValue("inverseGameSpeed", inverseGameSpeed)
+        //console.logValue("offsetSpeed", this.offsetSpeed)
+        this.speed = this.offsetSpeed
+
+        //console.logValue("speed", this.speed)
+        
+
+        if ((this.carSprite.bottom<this.horizont) || (this.carSprite.bottom>scene.screenHeight()+11))
         {
-            this.cycle = 0;
-            let temp = randint(0,100)
-            if (temp>90)
-            {
-                this.speed = -10
-            }
-            else if (temp>50)
-            {
-                this.speed = 10
+            this.carSprite.bottom=this.horizont
+            info.changeScoreBy(400)
+            if (this.position == CarPosition.Left)
+            { 
+                this.position= CarPosition.Right
             }
             else
             {
-                this.speed = 0
+                this.position= CarPosition.Left
             }
-        }
-        
-        
-
-        if ((this.carSprite.y<this.controllerTopOffset) || (this.carSprite.y>scene.screenHeight()+10))
-        {
-            this.carSprite.y=this.controllerTopOffset
-            this.speed = 15
+            let streetSprite = this.mappingYtoStreetIndexArray[this.carSprite.bottom]
+            this.carSprite.x = streetSprite.left+20
         }
         this.carSprite.vy = this.speed
 
-        console.logValue("speed", this.speed)
-        let y = Math.round(this.carSprite.y)
-        console.logValue("y", y)
-
+        let y = Math.round(this.carSprite.bottom)
+        //console.logValue("y", y)
 
         let streetSprite = this.mappingYtoStreetIndexArray[y]
         if (streetSprite!=null)
         {
-            let targetPosition = streetSprite.left-15
+            let targetPosition:number;
             if (this.position == CarPosition.Left)
             {
-                targetPosition = streetSprite.left+15
+                targetPosition = streetSprite.left+20
             }
-            console.logValue("targetPosition", targetPosition)
-            console.logValue("carSprite.x", this.carSprite.x)
+            else
+            {
+                targetPosition = streetSprite.right-20
+            }
+            //console.logValue("targetPosition", targetPosition)
+            //console.logValue("carSprite.x", this.carSprite.x)
 
-            if (this.carSprite.x <targetPosition)
+            if (this.carSprite.x < targetPosition-5)
             {
                 this.carSprite.vx = this.steeringSpeed 
             }
-            else if (this.carSprite.x > targetPosition)
+            else if (this.carSprite.x > targetPosition+5)
             {
                 this.carSprite.vx= (-this.steeringSpeed)
             }
@@ -113,14 +113,10 @@ class Cars {
             {
                 this.carSprite.vx=0
             }
-            
-            console.logValue("carSprite.vx", this.carSprite.vx)
-
-
         }
         else
         {
-            console.log("Null")
+            console.logValue("Null: y", y)
         }
     }
 

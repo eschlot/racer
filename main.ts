@@ -52,6 +52,34 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.WandTeilRechts, function (sprite
     info.changeLifeBy(-1)
 })
 
+let bumpOffset : int16 = 5
+
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Car, function(player: Sprite, carSprite: Sprite) {
+    if (player.x<carSprite.x)
+    {
+        player.x-=bumpOffset
+        carSprite.x+=bumpOffset
+    }
+    else
+    {
+        player.x+=bumpOffset
+        carSprite.x-=bumpOffset
+    }
+    
+    if (player.y<carSprite.y)
+    {
+        player.y-=bumpOffset
+        carSprite.y+=bumpOffset
+    }
+    else
+    {
+        player.y+=bumpOffset
+        carSprite.y-=bumpOffset
+    }
+
+    info.changeScoreBy(-10)
+})
+
 function calcLine (pos: number, linkeWandTeil: Sprite, rechteWandTeil: Sprite, streetSprite: Sprite) {
     streetSprite.x = pos
     linkeWandTeil.right = pos-streetOffset
@@ -72,7 +100,7 @@ function calcWalls (offset: number) {
     linkeWandTeil = linkeWandListe[0]
     streetSprite = streetListe[0]
 
-    streetOffset = Math.floor(strassenbreite/2)
+    streetOffset = (strassenbreite/2)
     pos = streetSprite.x + offset
 
     if ((pos > streetOffset) && (pos < scene.screenWidth()-streetOffset )) {
@@ -81,7 +109,8 @@ function calcWalls (offset: number) {
 }
 
 let Rennauto: Sprite = null
-let car : Cars = null
+let car1 : Cars = null
+let car2 : Cars = null
 let streetImage: Image = null
 let tempLw: Image = null
 
@@ -93,24 +122,26 @@ let streetListe: Sprite[] = []
 let linkeWandListe: Sprite[] = []
 let rechteWandListe: Sprite[] = []
 
-let startStrassenbreite = 70
-let strassenbreite = startStrassenbreite
+let startStrassenbreite: int16 = 70
+let strassenbreite:int16 = startStrassenbreite
 
-let scoreAddition = 0
-let speed = 30
-let controllerTopOffset = 80
-let kurve = 0
+let scoreAddition : int16 = 0
+let speed: int16 = 30
+let controllerTopOffset : int16 = 80
+let horizont : int16 =20
+let kurve : int16 = 0
+
 
 linkeWandListe = sprites.allOfKind(SpriteKind.WandTeilLinks)
 rechteWandListe = sprites.allOfKind(SpriteKind.WandTeilRechts)
 streetListe = sprites.allOfKind(SpriteKind.Street)
 
-let AnzahlWandteile = 13
-let hoehe = 1
-let y = 20
+let AnzahlWandteile:int16 = 14
+let hoehe : int16 = 1
+let y : int16 = horizont
 
-let pos = scene.screenWidth() /2
-let streetOffset = Math.floor(strassenbreite/2)
+let pos :int32 = scene.screenWidth() /2
+let streetOffset :int32 = strassenbreite/2
 
 for (let Index = 0; Index <= AnzahlWandteile; Index++) {
     tempLw = image.create(scene.screenWidth(), hoehe)
@@ -156,16 +187,16 @@ Rennauto = sprites.create(img`
 `, SpriteKind.Player)
 Rennauto.setFlag(SpriteFlag.StayInScreen, true)
 Rennauto.y = 110
-controller.moveSprite(Rennauto, 120, 20)
+controller.moveSprite(Rennauto, 120, 40)
 info.setLife(6)
-car = new Cars(streetListe,controllerTopOffset)
+car1 = new Cars(streetListe,horizont,horizont,CarPosition.Left)
+car2 = new Cars(streetListe,horizont,horizont*4,CarPosition.Right)
 
-
-
+scene.setBackgroundColor(Color.LightBlue)
 
 
 game.onUpdateInterval(2500, function () {
-    if (strassenbreite > 45) {
+    if (strassenbreite > 50) {
         strassenbreite = strassenbreite - 1
     }
 })
@@ -174,9 +205,11 @@ forever(function () {
         Rennauto.y = controllerTopOffset
     }
     speed = Rennauto.y - controllerTopOffset + 25
+    
     pause(speed)
     calcWalls(kurve)
-    car.updateInterval()
+    car1.updateInterval(speed)
+    car2.updateInterval(speed)
 })
 
 game.onUpdateInterval(800, function () {

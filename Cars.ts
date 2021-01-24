@@ -15,7 +15,7 @@ class Cars {
     private steeringSpeed = 100;
     private horizont :number;
 
-    constructor(streetListe: Sprite[], horizont: number, intialPosition:number){
+    constructor(streetListe: Sprite[], horizont: number, intialPosition:number, intialCarPosition:CarPosition){
         this.horizont = horizont
         this.carSprite = sprites.create(img`
             . . . . . . 8 8 c c 8 8 . . . .
@@ -49,7 +49,7 @@ class Cars {
             }
         }
 
-        this.position = CarPosition.Left
+        this.position = intialCarPosition
         this.carSprite.bottom = intialPosition
         this.speed = -1
 
@@ -70,17 +70,16 @@ class Cars {
         {
             this.carSprite.bottom=this.horizont
             info.changeScoreBy(400)
-            if (false)
-            {
-                if (this.position == CarPosition.Left)
-                { 
-                    this.position= CarPosition.Right
-                }
-                else
-                {
-                    this.position= CarPosition.Left
-                }
+            if (this.position == CarPosition.Left)
+            { 
+                this.position= CarPosition.Right
             }
+            else
+            {
+                this.position= CarPosition.Left
+            }
+            let streetSprite = this.mappingYtoStreetIndexArray[this.carSprite.bottom]
+            this.carSprite.x = streetSprite.left+20
         }
         this.carSprite.vy = this.speed
 
@@ -90,10 +89,14 @@ class Cars {
         let streetSprite = this.mappingYtoStreetIndexArray[y]
         if (streetSprite!=null)
         {
-            let targetPosition = streetSprite.left-20
+            let targetPosition:number;
             if (this.position == CarPosition.Left)
             {
                 targetPosition = streetSprite.left+20
+            }
+            else
+            {
+                targetPosition = streetSprite.right-20
             }
             //console.logValue("targetPosition", targetPosition)
             //console.logValue("carSprite.x", this.carSprite.x)

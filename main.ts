@@ -76,6 +76,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Car, function(player: Sprite, ca
         player.y+=bumpOffset
         carSprite.y-=bumpOffset
     }
+
     info.changeScoreBy(-10)
 })
 
@@ -188,8 +189,8 @@ Rennauto.setFlag(SpriteFlag.StayInScreen, true)
 Rennauto.y = 110
 controller.moveSprite(Rennauto, 120, 40)
 info.setLife(6)
-car1 = new Cars(streetListe,horizont,horizont)
-car2 = new Cars(streetListe,horizont,horizont*4)
+car1 = new Cars(streetListe,horizont,horizont,CarPosition.Left)
+car2 = new Cars(streetListe,horizont,horizont*4,CarPosition.Right)
 
 scene.setBackgroundColor(Color.LightBlue)
 
